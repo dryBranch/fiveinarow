@@ -24,7 +24,7 @@ public class Board extends JPanel{
 	/* default number of grid 15 * 15 */
 	private static int COMMON_LENGTH = 15;
 	/* default size of grids*/ 
-	private static int DEFAULT_SIZE = 40;
+	private static int DEFAULT_SIZE = 60;
 	
 	/* status of pieces */
 	private static Integer FREE = 2;
@@ -106,8 +106,6 @@ public class Board extends JPanel{
 		fillCircleCenter(g, c, c, pointSize);
 	}
 	
-	
-	
 	private void drawPieces(Graphics g) {
 		for(int row = 0; row < height; row++) {
 			for(int col = 0; col < width; col++) {
@@ -129,8 +127,6 @@ public class Board extends JPanel{
 		if(hover != null) {
 			int bias = 5;
 			int len = gridSize / 5;
-//			int ox = (int)((0.5 + hover.x) / gridSize);
-//			int oy = (int)((0.5 + hover.y) / gridSize);
 			GraphicsUtil.drawHover(g, hover.x, hover.y, bias, len);
 		}
 	}
@@ -211,7 +207,6 @@ public class Board extends JPanel{
 				hover = null;
 			}
 			repaint();
-			
 		}
 		
 	}
@@ -223,45 +218,42 @@ public class Board extends JPanel{
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			int row = getCurruntRow(e);
-			int col = getCurruntCol(e);
-			if(data[row][col] == FREE) {
-				System.out.println(++step);
-				data[row][col] = currentPlayer;
-				hover = null;
-				int x = (int)((0.5 + col) * gridSize);
-				int y = (int)((0.5 + row) * gridSize);
-				last = new Point(x , y);
-			}
-			repaint();
-			
-			if(isInRow(row, col)) {
-				String player = (currentPlayer == BLACK)? "BLACK" : "WHITE";
-				String msg = String.format("%s win\nplay again?", player);
-				int code = JOptionPane.showConfirmDialog(Board.this, msg);
-				if(code == JOptionPane.YES_OPTION) {
-					init();
-					repaint();
-				}else {
-					System.exit(0);
-				}
-				
-			}else {
-				nextPlayer();
-			}
+//			System.out.println("click");
 			
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+//			System.out.println("press");
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("release");
+			int row = getCurruntRow(e);
+			int col = getCurruntCol(e);
+			if(data[row][col] == FREE) {
+				System.out.println(++step);
+				data[row][col] = currentPlayer;
+				if(step % 2 == currentPlayer) System.out.println("err");
+				hover = null;
+				int x = (int)((0.5 + col) * gridSize);
+				int y = (int)((0.5 + row) * gridSize);
+				last = new Point(x , y);
+				repaint();
+				if(isInRow(row, col)) {
+					String player = (currentPlayer == BLACK)? "BLACK" : "WHITE";
+					String msg = String.format("%s win\nplay again?", player);
+					int code = JOptionPane.showConfirmDialog(Board.this, msg);
+					if(code == JOptionPane.YES_OPTION) {
+						init();
+					}else {
+						System.exit(0);
+					}
+				}else {
+					nextPlayer();
+				}
+			}
 		}
 
 		@Override
